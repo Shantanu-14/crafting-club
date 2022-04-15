@@ -12,6 +12,7 @@ const Tshirts = () => {
             price="69"
             sizes={["S", "M", "L", "XL"]}
             image="https://assets.ajio.com/medias/sys_master/root/20220121/8pKF/61ea5b4baeb2695cdd24612b/-473Wx593H-461592493-multi-MODEL.jpg"
+            slug="hey"
           />
           <Product
             name="Somename"

@@ -1,9 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @next/next/link-passhref */
 import React from "react";
 import Link from "next/link";
 
-const Product = ({ image, category, name, price, sizes }) => {
+const Product = ({ image, category, name, price, sizes, slug }) => {
   return (
-    <Link href={"/"}>
+    <Link href={`/product/${slug}`}>
       <div className="lg:w-[22%] md:w-[30%] p-4 w-full shadow-md cursor-pointer my-4 hover:shadow-xl transition-all duration-200">
         <a className="block relative h-80 rounded overflow-hidden">
           <img

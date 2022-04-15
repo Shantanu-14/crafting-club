@@ -2,11 +2,10 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdShoppingCart } from "react-icons/md";
-import { AiOutlineClose } from "react-icons/ai";
+import { AiOutlineClose, AiFillDelete } from "react-icons/ai";
 import { BiPlus, BiMinus } from "react-icons/bi";
 
-
-const Navbar = () => {
+const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [sidebar, setSidebar] = useState(false);
 
@@ -20,9 +19,8 @@ const Navbar = () => {
   const handleClose = () => {
     setMobileMenu(false);
   };
-
   return (
-    <div className="navbar flex justify-between items-center p-4 sticky top-0 bg-white z-50 shadow-md z-50">
+    <div className="navbar flex justify-between items-center p-4 sticky top-0 bg-white z-50 shadow-md">
       <div
         className="flex justify-center items-center md:hidden"
         onClick={handleClick}
@@ -78,37 +76,65 @@ const Navbar = () => {
       <div
         className={
           sidebar
-            ? "sidebar fixed bg-white min-h-screen w-[100%] md:w-2/5 lg:w-3/7 xl:w-1/5 right-0 top-0 transition-all duration-200 shadow-lg px-4"
-            : "sidebar fixed bg-white min-h-screen w-1/5 right-[-20%] top-0 transition-all duration-200"
+            ? "sidebar fixed bg-gray-100 min-h-screen w-[100%] md:w-2/5 lg:w-3/7 xl:w-1/5 right-0 top-0 transition-all duration-200 shadow-lg px-4"
+            : "sidebar fixed bg-white min-h-screen w-[100%] md:w-2/5 lg:w-3/7 xl:w-1/5 right-[-100%] top-0 transition-all duration-200"
         }
       >
-        <div className="head flex justify-between py-6 border-b-[0.5px] border-gray-300">
+        <div className="head flex justify-between items-center py-6 border-b-[0.5px] border-gray-300">
           <p className="text-xl ml-3 font-semibold text-gray-800">Cart</p>
-          <button onClick={toggleSidebar}>
-            <AiOutlineClose className="text-3xl" />
-          </button>
-        </div>
-        <div className="contentList mx-3 space-y-6 mt-6">
-          <div className="item flex justify-between items-center">
-            <div>
-              <span className="text-[17px]">1. </span>
-              <span className="text-[17px]">Tshirt - Lelo</span>
-            </div>
-            <div className="flex items-center">
-              <button>
-                <BiMinus />
+          <div className="space-x-3">
+            {Object.keys(cart).length > 0 && (
+              <button onClick={clearCart} title="Clear Cart">
+                <AiFillDelete className="text-3xl" />
               </button>
-              <span className="px-4 py-1 mx-2 border-[1px] rounded-md">2</span>
-              <button>
-                <BiPlus />
-              </button>
-            </div>
+            )}
+            <button onClick={toggleSidebar} title="Close Cart">
+              <AiOutlineClose className="text-3xl" />
+            </button>
           </div>
         </div>
+        <div className="contentList mx-3 space-y-6 mt-6">
+          {Object.keys(cart).length == 0 && (
+            <div className="text-center text-gray-600">
+              No Items in the Cart
+            </div>
+          )}
+          {Object.keys(cart).map((item) => {
+            return (
+              <div
+                className="item flex justify-between items-center"
+                key={item}
+              >
+                <div>
+                  <span className="text-[17px]">1. </span>
+                  <span className="text-[17px]">{cart[item].name}</span>
+                </div>
+                <div className="flex items-center">
+                  <button onClick={()=>{removeFromCart(cart[item].itemCode,cart[item].name,cart[item].size,cart[item].variant,1,cart[item].price)}} >
+                    <BiMinus />
+                  </button>
+                  <span className="px-4 py-1 mx-2 border-[1px] rounded-md">
+                    {cart[item].qty}
+                  </span>
+                  <button  onClick={()=>{addToCart(cart[item].itemCode,cart[item].name,cart[item].size,cart[item].variant,1,cart[item].price)}} >
+                    <BiPlus />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        {Object.keys(cart).length > 0 && (
+          <div className=" mx-3 mt-6 text-2xl">
+            Sub Total : &#8377; {subTotal}
+          </div>
+        )}
         <div>
-          <button className="flex mx-auto mt-16 text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg">
-            Proceed to Buy
-          </button>
+          {Object.keys(cart).length > 0 && (
+            <button className="flex mx-auto mt-6 text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg">
+              Proceed to Buy
+            </button>
+          )}
         </div>
       </div>
     </div>
