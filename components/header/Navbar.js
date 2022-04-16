@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/link-passhref */
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -131,9 +132,11 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
         )}
         <div>
           {Object.keys(cart).length > 0 && (
+            <Link href={'/order/checkout'} >
             <button className="flex mx-auto mt-6 text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg">
               Proceed to Buy
             </button>
+            </Link>
           )}
         </div>
       </div>

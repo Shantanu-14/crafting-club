@@ -1,8 +1,13 @@
 import React from 'react'
+import Cart from '../../components/cart/Cart'
+import DeliveryForm from '../../components/forms/DeliveryForm'
 
-const Checkout = () => {
+const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
   return (
-    <div>Checkout</div>
+    <div>
+      <DeliveryForm/>
+      <Cart cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} />
+    </div>
   )
 }
 
