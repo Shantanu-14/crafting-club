@@ -4,8 +4,10 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { BACKEND_SERVER } from "../../BACKEND_SERVER";
 import { BsHeartFill } from "react-icons/bs";
+import { BiPlus, BiMinus } from "react-icons/bi"
 const Post = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
   const [servicable, setServicable] = useState(null);
+  const [qty, setQty] = useState(1);
   const [pin, setPin] = useState(null);
   const router = useRouter();
   const { slug } = router.query;
@@ -13,11 +15,14 @@ const Post = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
   const checkService = async () => {
     const pins = await axios.get(`${BACKEND_SERVER}/pincode`);
     if (pins.data.includes(parseInt(pin))) {
-      setServicable(true)
+      setServicable(true);
     } else {
-      setServicable(false)
-      
+      setServicable(false);
     }
+  };
+
+  const handleQty = (action) => {
+    action === "add" ? setQty(qty + 1) : setQty(qty - 1);
   };
 
   let rating = [];
@@ -58,7 +63,7 @@ const Post = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             <img
               alt="ecommerce"
               className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
-              src="https://dummyimage.com/400x400"
+              src="https://assets.ajio.com/medias/sys_master/root/20220121/8pKF/61ea5b4baeb2695cdd24612b/-473Wx593H-461592493-multi-MODEL.jpg"
             />
             <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
               <h2 className="text-sm title-font text-gray-500 tracking-widest">
@@ -118,16 +123,45 @@ const Post = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
               </div>
               <div className="md:flex w-[100%] justify-between items-center pt-3 pb-7 border-b-2 border-gray-100 mb-5 ">
                 <p className=" text-center title-font font-medium text-3xl text-gray-900">
-                &#8377;58.00
+                  &#8377;58.00
                 </p>
+                <div className="flex mt-5 md:mt-0 space-x-7  ">
+                  <div className="flex space-x-5">
+                    <div className="flex items-center">
+                      <button
+                        disabled={qty===1?true:false}
+                        onClick={() => {
+                          handleQty("minus")
+                        }}
+                      >
+                        <BiMinus className="text-xl hover:text-pink-500  " />
+                      </button>
+                      <span className="px-4 py-1 mx-2 border-[1px] rounded-md text-xl">
+                        {qty}
+                      </span>
+                      <button
+                        onClick={() => {
+                         handleQty("add")
+                        }}
+                      >
+                        <BiPlus className="text-xl hover:text-pink-500 " />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="md:flex w-[100%] justify-between items-center pt-3 pb-7 border-b-2 border-gray-100 mb-5 ">
                 <div className="flex mt-5 md:mt-0 space-x-7  ">
                   <div className="flex space-x-5">
                     <button className="flex text-white bg-pink-500 border-0 py-2 px-6 focus:outline-none hover:bg-pink-600 rounded">
                       Buy Now
                     </button>
-                    <button 
-                    onClick={()=>{addToCart("blah","Tshirt","S","Red",3,499)}}
-                    className="flex text-white bg-pink-500 border-0 py-2 px-6 focus:outline-none hover:bg-pink-600 rounded">
+                    <button
+                      onClick={() => {
+                        addToCart("blah", "Tshirt", "S", "Red", qty, 499);
+                      }}
+                      className="flex text-white bg-pink-500 border-0 py-2 px-6 focus:outline-none hover:bg-pink-600 rounded"
+                    >
                       Add to Cart
                     </button>
                   </div>
@@ -155,8 +189,16 @@ const Post = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
                   </button>
                 </div>
                 <div className="flex space-x-5">
-                 { (servicable && servicable!==null) && <div className="mt-3 text-blue-500">Yes! The item is Deliverable.</div> }
-                 { (!servicable && servicable!==null) && <div className="mt-3 text-blue-500">Sorry! Delivery is not Availabile.</div> }
+                  {servicable && servicable !== null && (
+                    <div className="mt-3 text-blue-500">
+                      Yes! The item is Deliverable.
+                    </div>
+                  )}
+                  {!servicable && servicable !== null && (
+                    <div className="mt-3 text-blue-500">
+                      Sorry! Delivery is not Availabile.
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

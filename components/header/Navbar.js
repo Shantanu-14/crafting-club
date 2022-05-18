@@ -133,7 +133,9 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
         <div>
           {Object.keys(cart).length > 0 && (
             <Link href={'/order/checkout'} >
-            <button className="flex mx-auto mt-6 text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg">
+            <button 
+            onClick={toggleSidebar}
+            className="flex mx-auto mt-6 text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg">
               Proceed to Buy
             </button>
             </Link>
